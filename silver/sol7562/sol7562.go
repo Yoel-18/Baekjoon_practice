@@ -31,7 +31,7 @@ func find(x1, y1, x2, y2, ii int) int {
 		s[i] = make([]int, ii)
 	}
 	count := 0
-	q := []pos{{x1, y1}}
+	q := []pos{{x1, y1}} // 시작위치 인큐
 	s[x1][y1] = 1
 	for len(q) > 0 {
 		o := q[0]
