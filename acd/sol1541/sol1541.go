@@ -34,3 +34,6 @@ func main() {
 	}
 	fmt.Fprint(bw, answer)
 }
+
+//	곱셈과 나눗셈이 있다고 가정
+//	문제가 쉽지 않네용
