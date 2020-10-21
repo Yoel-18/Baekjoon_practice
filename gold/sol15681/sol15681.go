@@ -2,21 +2,24 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strconv"
 )
 
 var (
 	sc    = bufio.NewScanner(os.Stdin)
+	bw    = bufio.NewWriter(os.Stdout)
 	tree  [][]int
-	check = [10001]bool{}
-	dp    = [10001]int{}
+	check []bool
+	dp    []int
 )
 
 func main() {
+	defer bw.Flush()
 	n, r, q := nextInt(), nextInt(), nextInt()
 	tree = make([][]int, n+1)
+	check = make([]bool, n+1)
+	dp = make([]int, n+1)
 	for i := 1; i < n; i++ {
 		u, v := nextInt(), nextInt()
 		tree[u] = append(tree[u], v)
@@ -25,7 +28,8 @@ func main() {
 	makeTree(r)
 	for i := 0; i < q; i++ {
 		uu := nextInt()
-		fmt.Println(dp[uu])
+		str := strconv.Itoa(dp[uu])
+		bw.WriteString(str + "\n")
 	}
 }
 func makeTree(cur int) int {
