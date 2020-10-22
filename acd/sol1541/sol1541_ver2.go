@@ -17,6 +17,7 @@ var (
 
 //	나눗셈, 곱셈 추가
 //	사칙연산 순서를 지킨다고 가정
+//	경우의 수가 너무 많습니다...
 func main() {
 	defer bw.Flush()
 	fmt.Fscan(br, &input)
