@@ -57,7 +57,7 @@ func printTri(tri [500][500]int) {
 			fmt.Fprint(bw, " ")
 		}
 		for j := 0; j < i+1; j++ {
-			fmt.Fprint(bw, tri[i][j], "  ")
+			fmt.Fprintf(bw, "%3d", tri[i][j])
 		}
 		fmt.Fprintln(bw)
 	}
