@@ -6,26 +6,28 @@ var res = -1
 
 func main() {
 	var n, m int
-	var virusMap [][]int
+	var vmap [][]int
 	fmt.Scan(&n, &m)
-	virusMap = make([][]int, n)
+	vmap = make([][]int, n)
 	for i := 0; i < n; i++ {
-		virusMap[i] = make([]int, m)
+		vmap[i] = make([]int, m)
 		for j := 0; j < m; j++ {
-			fmt.Scan(&virusMap[i][j])
+			fmt.Scan(&vmap[i][j])
 		}
 	}
-	search(virusMap, 0, 0, 0)
+	search(vmap, 0, 0, 0)
 	fmt.Print(res)
 }
+
+//d: 벽의 갯수
 func search(vmap [][]int, d, r, c int) {
 	if d == 3 {
-		var virus []coord //	바이러스담기
+		var virus []pos //	바이러스담기
 		count := 0
 		for i := range vmap {
 			for j := range vmap[i] {
 				if vmap[i][j] == 2 {
-					var tmp coord
+					var tmp pos
 					tmp.r = i
 					tmp.c = j
 					vmap[i][j] = 0
@@ -87,11 +89,7 @@ func infectVirus(vmap [][]int, r, c int) {
 	}
 }
 
-type coord struct {
+type pos struct {
 	r int
 	c int
-}
-type node struct {
-	node int
-	key  int
 }
