@@ -38,60 +38,39 @@ func main() {
 			}
 		}
 	}
-	find()
-	fmt.Fprint(bw, count)
+	if find() && count <= 10 {
+		fmt.Fprint(bw, count)
+	} else {
+		fmt.Fprint(bw, -1)
+	}
 }
-func find() {
-	q := make([][4]int, 0) //	빨간공, 파란공 좌표
-	disQ := make([]int, 0) //	이동거리
-	q = append(q, [4]int{redX, redY, blueX, blueY})
-	disQ = append(disQ, 0)
+func find() bool {
+	q := make([][5]int, 0)
+	q = append(q, [5]int{redX, redY, blueX, blueY, 0})
 	check[redX][redY][blueX][blueY] = true
 	for len(q) > 0 {
-		rx := q[0][0]
-		ry := q[0][1]
-		bx := q[0][2]
-		by := q[0][3]
-		dis := disQ[0]
+		rx, ry, bx, by, dis := q[0][0], q[0][1], q[0][2], q[0][3], q[0][4]
 		q = q[1:]
-		disQ = disQ[1:]
-
 		for i := 0; i < 4; i++ {
-			newRX := rx
-			newRY := ry
-			newBX := bx
-			newBY := by
+			newRX, newRY, newBX, newBY, newDis := rx, ry, bx, by, dis+1
 			countR, countB := 0, 0
-			newDis := dis + 1
-
-			//	빨간색 이동
 			for board[newRX+dPos[i].x][newRY+dPos[i].y] != "#" && board[newRX][newRY] != "O" {
 				newRX += dPos[i].x
 				newRY += dPos[i].y
 				countR++
 			}
-
-			//	파란색 이동
 			for board[newBX+dPos[i].x][newBY+dPos[i].y] != "#" && board[newBX][newBY] != "O" {
 				newBX += dPos[i].x
 				newBY += dPos[i].y
 				countB++
 			}
-
-			//	파란색 들어가면 무시
 			if newBX == hX && newBY == hY {
 				continue
 			}
-			//	빨간색 들어가면 움직인 횟수 넣고 종료
 			if newRX == hX && newRY == hY {
 				count = newDis
-				return
+				return true
 			}
-
-			//	두 공의 위치가 겹치면
-			//	이동거리에서 더 많이 이동한 쪽의 값을 하나씩 빼준다
-			//	임의의 방향으로 이동했을 때 겹친다는건
-			//	움직이기 전의 배치와 같기 때문
 			if newRX == newBX && newRY == newBY {
 				if countR > countB {
 					newRX -= dPos[i].x
@@ -101,17 +80,13 @@ func find() {
 					newBY -= dPos[i].y
 				}
 			}
-
-			//	이전에 간 곳이 아니면 BFS 탐색
 			if !check[newRX][newRY][newBX][newBY] {
 				check[newRX][newRY][newBX][newBY] = true
-				q = append(q, [4]int{newRX, newRY, newBX, newBY})
-				disQ = append(disQ, newDis)
+				q = append(q, [5]int{newRX, newRY, newBX, newBY, newDis})
 			}
 		}
 	}
-	//	못찾으면 -1
-	count = -1
+	return false
 }
 
 type point struct {
