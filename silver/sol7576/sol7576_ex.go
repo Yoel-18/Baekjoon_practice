@@ -60,7 +60,7 @@ func isAll() {
 			}
 		}
 	}
-	fmt.Print(count - 1)
+	fmt.Print(count)
 }
 
 type pos struct {
