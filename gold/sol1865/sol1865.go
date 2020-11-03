@@ -13,6 +13,8 @@ var (
 	tc, n, m, w int
 )
 
+//	https://devowen.com/250
+//	벨만 포드
 func main() {
 	tc = nextInt()
 	for i := 0; i < tc; i++ {

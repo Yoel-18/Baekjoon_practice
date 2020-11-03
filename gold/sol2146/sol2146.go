@@ -9,14 +9,15 @@ import (
 )
 
 var (
-	sc                    = bufio.NewScanner(os.Stdin)
-	n, num, isLand, count int
-	min                   = math.MaxInt32
-	maap                  [100][100]int
-	dx                    = []int{-1, 1, 0, 0}
-	dy                    = []int{0, 0, -1, 1}
-	check                 [100][100]bool
-	isEnd                 bool
+	sc     = bufio.NewScanner(os.Stdin)
+	n, num int
+	min    = math.MaxInt32
+	maap   = [100][100]int{}
+	dis    = [100][100]int{}
+	dx     = []int{-1, 1, 0, 0}
+	dy     = []int{0, 0, -1, 1}
+	check  = [100][100]bool{}
+	isEnd  bool
 )
 
 func main() {
@@ -24,6 +25,7 @@ func main() {
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
 			maap[i][j] = nextInt()
+			dis[i][j] = math.MaxInt32
 		}
 	}
 
@@ -32,78 +34,67 @@ func main() {
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
 			if !check[i][j] && maap[i][j] == 1 {
-				setNumber(i, j, num)
+				setNumber(i, j)
+				num++
 			}
 		}
 	}
 
+	//	다리계산
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
-			if maap[i][j] >= 1 {
-				num = maap[i][j]
-				for d := 0; d < 4; d++ {
-					isEnd = false
-					if checkRange(i+dx[d], j+dy[d]) {
-						continue
-					}
-					if maap[i+dx[d]][j+dy[d]] == 0 {
-						makeBridge(i+dx[d], j+dy[d])
-						if min > count {
-							min = count
-						}
-					}
-				}
+			if maap[i][j] != 0 {
+				find(maap[i][j], i, j, 0)
 			}
 		}
 	}
 	fmt.Print(min)
 }
-func setNumber(x, y, num int) {
-	q := make([]pos, 0)
-	maap[x][y] = num
-	q = append(q, pos{x, y})
-	check[x][y] = true
-
-	if len(q) > 0 {
-		cur := q[0]
-		q = q[1:]
-
-		for d := 0; d < 4; d++ {
-			nx := cur.x + dx[d]
-			ny := cur.y + dy[d]
-
-			if checkRange(nx, ny) {
-				continue
-			}
-			if check[nx][ny] {
-				continue
-			}
-			if maap[nx][ny] == 1 {
-				maap[nx][ny] = num
-				q = append(q, pos{nx, ny})
-				check[nx][ny] = true
-			}
-		}
-	}
-}
-func makeBridge(x, y int) {
-	if checkRange(x, y) {
+func find(landNum, x, y, count int) {
+	if min <= count {
 		return
 	}
 	for i := 0; i < 4; i++ {
 		nx := x + dx[i]
 		ny := y + dy[i]
 
-		if !checkRange(nx, ny) && maap[nx][ny] == 0 {
-			count++
-			makeBridge(nx, ny)
+		if checkRange(nx, ny) {
+			continue
+		}
+		if dis[nx][ny] <= count+1 {
+			continue
+		}
+		if maap[nx][ny] == 0 {
+			dis[nx][ny] = count + 1
+			find(landNum, nx, ny, count+1)
+			continue
+		}
+		if maap[nx][ny] != landNum {
+			min = minInt(count, min)
+			return
 		}
 	}
-
+}
+func setNumber(x, y int) {
+	check[x][y] = true
+	maap[x][y] = num
+	for i := 0; i < 4; i++ {
+		nx := x + dx[i]
+		ny := y + dy[i]
+		if !checkRange(nx, ny) && !check[nx][ny] && maap[nx][ny] != 0 {
+			setNumber(nx, ny)
+		}
+	}
 }
 
 func checkRange(x, y int) bool {
 	return (x < 0 || x >= n || y < 0 || y >= n)
+}
+func minInt(a, b int) int {
+	if a > b {
+		return b
+	}
+	return a
 }
 
 type pos struct {
