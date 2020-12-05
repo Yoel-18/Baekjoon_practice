@@ -19,7 +19,7 @@ func solution(str string) int {
 		for j := 0; j < len(str); j += i {
 			cur := ""
 			if i+j >= len(str) { //	최대길이가 되면 끝까지 자르기
-				cur = str[j:len(str)]
+				cur = str[j:]
 			} else {
 				cur = str[j : j+i] //	i칸씩 자르기
 			}
@@ -30,7 +30,7 @@ func solution(str string) int {
 				cur2 := ""
 
 				if k+i >= len(str) { //	최대 길이가 되면 끝까지 자르기
-					cur2 = str[k:len(str)]
+					cur2 = str[k:]
 				} else {
 					cur2 = str[k : k+i] //	i칸씩 자르기
 				}
