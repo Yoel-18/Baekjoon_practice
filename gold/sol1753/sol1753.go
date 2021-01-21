@@ -66,7 +66,6 @@ type pair struct {
 	y int
 }
 
-//To implement an interface in Go, we just need to implement all the methods in the interface
 type queue []*pair
 
 func (q queue) Len() int {
